@@ -25,7 +25,7 @@
 #include <logging/log.h>
 LOG_MODULE_REGISTER(bas);
 
-static uint8_t battery_level = 100U;
+static uint16_t battery_level = 1000U;
 
 static void blvl_ccc_cfg_changed(const struct bt_gatt_attr *attr,
 				       uint16_t value)
@@ -41,7 +41,7 @@ static ssize_t read_blvl(struct bt_conn *conn,
 			       const struct bt_gatt_attr *attr, void *buf,
 			       uint16_t len, uint16_t offset)
 {
-	uint8_t lvl8 = battery_level;
+	uint16_t lvl8 = battery_level;
 
 	return bt_gatt_attr_read(conn, attr, buf, len, offset, &lvl8,
 				 sizeof(lvl8));
@@ -64,16 +64,16 @@ static int bas_init(const struct device *dev)
 	return 0;
 }
 
-uint8_t bt_bas_get_battery_level(void)
+uint16_t bt_bas_get_battery_level(void)
 {
 	return battery_level;
 }
 
-int bt_bas_set_battery_level(uint8_t level)
+int bt_bas_set_battery_level(uint16_t level)
 {
 	int rc;
 
-	if (level > 100U) {
+	if (level > 1000U) {
 		return -EINVAL;
 	}
 
